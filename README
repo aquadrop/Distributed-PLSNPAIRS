@@ -16,7 +16,7 @@ Worker side:
    - master side: "java -Xmx2G -jar plsnpairs-master.jar NPAIRS RUN_ANALYSIS ./SetupFiles/2-2-8.mat"
    - worker side: "java -Xmx8G -jar plsnpairs-worker.jar"
 
-4. In the folder Runnable, the full data is provided, as well as the various testing setupfiles. Also, precompiled jar files called plsnpairs-master.jar and plsnpairs-worker.jar are given. If directly clicked, the GUI will be called; thus we have to run them in command line. 
+4. In the folder Runnable, which can be downloaded at https://dl.dropboxusercontent.com/u/83483579/Runnable.zip, the full data is provided, as well as the various testing setupfiles. Also, precompiled jar files called plsnpairs-master.jar and plsnpairs-worker.jar are given. If directly clicked, the GUI will be called; thus we have to run them in command line. 
    - The Runnable package can be downloaded at 
 
 Please use NFS to avoid deploying data to workers.
