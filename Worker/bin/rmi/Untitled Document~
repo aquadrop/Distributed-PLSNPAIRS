@@ -1,0 +1,6 @@
+#!/bin/sh
+javac MainInterface.java
+javac MainInterfaceImp.java
+rmi MainInterfaceImp
+javac MainServer.java
+java MainServer

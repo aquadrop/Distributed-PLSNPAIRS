@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink
+END
+license.txt
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/license.txt
+END
+libJMatLink.so
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/libJMatLink.so
+END
+JMatLink.dll
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/JMatLink.dll
+END
+ToDo.txt
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/ToDo.txt
+END
+INSTALL.txt
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/INSTALL.txt
+END
+ChangeLog.txt
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/ChangeLog.txt
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/build.properties
+END
+JMatLink130.zip
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/JMatLink130.zip
+END
+build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/build.xml
+END

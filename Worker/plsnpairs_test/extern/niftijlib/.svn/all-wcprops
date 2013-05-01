@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/niftijlib
+END
+Nifti1Dataset.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/niftijlib/Nifti1Dataset.java
+END
+EndianCorrectInputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/niftijlib/EndianCorrectInputStream.java
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/niftijlib/README
+END
+EndianCorrectOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/niftijlib/EndianCorrectOutputStream.java
+END

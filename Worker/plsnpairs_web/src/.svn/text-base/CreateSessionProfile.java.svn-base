@@ -1,0 +1,176 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import pls.sessionprofile.RunInformation;
+import pls.sessionprofile.SessionProfile;
+import pls.shared.BfMRISessionFileFilter;
+import pls.shared.fMRISessionFileFilter;
+
+/**
+ * Servlet implementation class CreateSessionProfile
+ */
+public class CreateSessionProfile extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public CreateSessionProfile() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Map params = request.getParameterMap();
+		
+		if (params == null) {
+			return;
+		}
+		
+		boolean isNPAIRS = false;
+		if (params.containsKey("NPAIRS") ) {
+			isNPAIRS = Boolean.parseBoolean(request.getParameter("NPAIRS") );
+		}
+		
+		boolean isBlock = true;
+		if (params.containsKey("BLOCK") ) {
+			isBlock = Boolean.parseBoolean(request.getParameter("BLOCK") );
+		}
+		
+		String sessionFile = "";
+		if (params.containsKey("SESSION_FILE") ) {
+			sessionFile = request.getParameter("SESSION_FILE");
+		} else {
+			sessionFile = "session_file_" + System.currentTimeMillis();
+			if (isBlock) {
+				sessionFile += BfMRISessionFileFilter.EXTENSION;
+			} else {
+				sessionFile += fMRISessionFileFilter.EXTENSION;
+			}
+			response.getWriter().println("Automatically generated session file name used: " + sessionFile);
+		}
+		
+		String description = sessionFile;
+		if (params.containsKey("DESCRIPTION") ) {
+			description = request.getParameter("DESCRIPTION");
+		}
+		
+		String ignoreRunsString = "";
+		int[] ignoreRuns = null;
+		if (params.containsKey("IGNORE_RUNS") ) {
+			ignoreRunsString = request.getParameter("IGNORE_RUNS"); 
+			String[] ints = ignoreRunsString.split(",");
+			
+			ignoreRuns = new int[ints.length];
+			for (int i = 0; i < ints.length; ++i) {
+				try {
+					ignoreRuns[i] = Integer.parseInt(ints[i]);
+				} catch (NumberFormatException nfex) {
+					response.getWriter().println("Runs to ignore must be integers.");
+					return;
+				}
+			}
+		}
+		
+		String brainMaskFile = "";
+		if (params.containsKey("BRAIN_MASK") ) {
+			brainMaskFile = request.getParameter("BRAIN_MASK_FILE");
+		}
+		
+		int numSkippedScans = 0;
+		if (params.containsKey("NUM_SKIPPED_SCANS") ) {
+			numSkippedScans = Integer.parseInt(request.getParameter("NUM_SKIPPED_SCANS") );
+		}
+		
+		boolean mergeAcrossRuns = false;
+		if (params.containsKey("MERGE_ACROSS_RUNS") ) {
+			mergeAcrossRuns = true;
+			mergeAcrossRuns = Boolean.parseBoolean(request.getParameter("MERGE_ACROSS_RUNS") );
+		}
+		
+		Vector<String[]> conditionInfo = new Vector<String[]>();
+		if (params.containsKey("CONDITION_INFO") ) {
+			String[] groups = request.getParameter("CONDITION_INFO").split("\n");
+			for (String group : groups) {
+				String[] conditions = group.split(" ");
+				conditionInfo.add(conditions);
+			}
+		}
+		
+		Vector<RunInformation> runInfo = new Vector<RunInformation>();
+		if (params.containsKey("RUN_PATHS") && params.containsKey("RUN_FILES") &&
+				params.containsKey("RUN_ONSETS") && params.containsKey("RUN_LENGTHS") ) {
+			String[] runPaths = request.getParameter("RUN_PATHS").split("\n");
+			String[] runFiles = request.getParameter("RUN_FILES").split("\n");
+			String[] runOnsets = request.getParameter("RUN_ONSETS").split("\n");
+			String[] runLengths = request.getParameter("RUN_LENGTHS").split("\n");
+
+			if (runPaths.length == runFiles.length &&
+					runPaths.length == runOnsets.length &&
+					runPaths.length == runLengths.length ) {
+				for (int i = 0; i < runPaths.length; ++i) {
+					String runPath = runPaths[i];
+					
+					ArrayList<String> onsetsList = new ArrayList<String>();
+					String[] onsets = runOnsets[i].split(":");
+					
+					for(String onset : onsets) {
+						onsetsList.add(onset);
+					}
+					
+					ArrayList<String> lengthsList = new ArrayList<String>();
+					String[] lengths = runLengths[i].split(":");
+					for(String length : lengths) {
+						lengthsList.add(length);
+					}
+					
+					RunInformation ri = new RunInformation(runPath, runFiles[i], onsetsList);
+					ri.lengths = lengthsList;
+					runInfo.add(ri);
+				}
+			} else {
+				response.getWriter().println("All pieces of run-info must have the same length.");
+				return;
+			}
+		} else {
+			response.getWriter().println("You need to have at least one run.");
+		}
+		
+		String datamatPrefix = "";
+		if (params.containsKey("DATAMAT_PREFIX") ) {
+			datamatPrefix = request.getParameter("DATAMAT_PREFIX");
+		} else {
+			datamatPrefix = sessionFile;
+			response.getWriter().println("Using session file name as datamat prefix: " + sessionFile);
+			return;
+		}
+		
+		SessionProfile profile = new SessionProfile(description, datamatPrefix, mergeAcrossRuns, conditionInfo,
+				runInfo, !brainMaskFile.equals(""), brainMaskFile, isNPAIRS, isBlock, numSkippedScans, ignoreRuns);
+		
+		try {
+			profile.saveSessionProfile(sessionFile);
+			response.getWriter().println("Session profile was successfully created.");
+		} catch (IOException e) {
+			e.printStackTrace(response.getWriter() );
+		}
+	}
+
+}

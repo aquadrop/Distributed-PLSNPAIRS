@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="extern/jMatLink/" kind="src" path="plsnpairs"/>
+	<classpathentry kind="src" path="plsnpairs_test"/>
+	<classpathentry kind="src" path="plsnpairs_web/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/arpack-combo-0.1.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/blas.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/colt.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/commons-math-1.1.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/core-lapack.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/f2jutil.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/ij.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/j3dcore.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/Jama-1.0.2.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/jfreechart-1.0.13.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/jlfgr-1_0.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/jmatio.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/lapack.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/MindSeer.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/netlib-java-0.9.1.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/parallelcolt-0.9.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/swingx_v0201.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/vecmath.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/xerbla.jar"/>
+	<classpathentry kind="lib" path="plsnpairs/extern/jMatLink"/>
+	<classpathentry kind="lib" path="plsnpairs/lib/j2ee-1.4.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
