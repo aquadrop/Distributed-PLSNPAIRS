@@ -1,0 +1,26 @@
+Master side:
+1. To start with master mode, an argument should be provided.
+   - SetupFiles are accompanied within the working directory.
+   - Original files are RRSD_25Subjects_NPAIRSAnalysisSetup.mat and RRSD_31Subjects_NPAIRSAnalysisSetup.mat. The others are for test purpose.
+   - For instance, "25-2-8.mat" indicates the features split_partition:[12,13] and pc_range: 2-8, which you can read from within the file
+   - Argument Example: "NPAIRS RUN_ANALYSIS ./SetupFiles/2-2-8.mat"
+
+2. The normal GUI mode will be called when no argument is provided.
+
+Worker side:
+1. No program argument is mandatory to start the worker mode.
+2. Please provide VM arguments to indicate the available memory, for instance, "-Xmx8G".
+
+
+3. Command Line Example, after you created "jar" file in the folder "Runnable"
+   - master side: "java -Xmx2G -jar plsnpairs-master.jar NPAIRS RUN_ANALYSIS ./SetupFiles/2-2-8.mat"
+   - worker side: "java -Xmx8G -jar plsnpairs-worker.jar"
+
+4. In the folder Runnable, the full data is provided, as well as the various testing setupfiles. Also, precompiled jar files called plsnpairs-master.jar and plsnpairs-worker.jar are given. If directly clicked, the GUI will be called; thus we have to run them in command line. 
+   - The Runnable package can be downloaded at 
+
+Please use NFS to avoid deploying data to workers.
+
+The original project is at https://code.google.com/p/plsnpairs/
+
+-Enjoy!   
