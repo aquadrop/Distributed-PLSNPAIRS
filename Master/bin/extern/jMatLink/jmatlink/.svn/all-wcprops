@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink
+END
+JMatLink.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/JMatLink.h
+END
+libJMatLink.so
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/libJMatLink.so
+END
+CoreJMatLink.class
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/CoreJMatLink.class
+END
+make_jmatlink
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/make_jmatlink
+END
+JMatLink.c
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/JMatLink.c
+END
+JMatLinkException.class
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/JMatLinkException.class
+END
+JMatLink.class
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/1740/trunk/plsnpairs_test/extern/jMatLink/jmatlink/JMatLink.class
+END

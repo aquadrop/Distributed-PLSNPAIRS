@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v6.0"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/plsnpairs"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/blas.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/colt.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/commons-math-1.1.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/concurrent.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/f2jutil.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/ij.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/j3dcore.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/Jama-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/jcommon-1.0.15.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/jfreechart-1.0.12.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/jlfgr-1_0.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/jmatio.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/lapack.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/MindSeer.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/niftijlib.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/parallelcolt-0.6.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/swingx_v0201.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/vecmath.jar"/>
+	<classpathentry kind="lib" path="/plsnpairs/extern/xerbla.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

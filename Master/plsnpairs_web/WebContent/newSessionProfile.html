@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>PLS/NPAIRS Create session profile</title>
+<link type="text/css" href="http://jqueryui.com/latest/themes/base/ui.all.css" rel="stylesheet" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+<script type="text/javascript" src="jquery.dupeIt.js"></script>
+<script type="text/javascript">
+var numberOfConditions = 0;
+
+$(function(){
+	$("p#conditionRow").dupeIt({addvalue:"Add Condition", addcallback: addCondition, maxrows:128, removecallback: removeCondition});
+	$("li#run").dupeIt({addvalue:"Add Run", addcallback: addRun, maxrows:128});
+});
+
+$(document).ready(function(){
+	$('#folderBrowser').dialog({ autoOpen: false });
+	$('#filesBrowser').dialog({ autoOpen: false });
+
+	// start the timer.
+	//setInterval("refreshRuns()", 5000);
+});
+
+function addCondition() {
+	// Find the missing condition
+	var numConditions = $("input[name*='conditionName']").size();
+
+	// Add that condition to each run
+	var runTables = document.getElementsByName("slam");
+
+	for(var i = 0; i < runTables.length; ++i) {
+		runTables[i].insertRow(numConditions);
+		var row = runTables[i].rows[numConditions];
+		row.innerHTML = "<td></td><td><input type='text'></td><td><input type='text'></td>";
+	}
+}
+
+function removeCondition(i) {
+	var conditionToRemove = $("input[name*='conditionName']").size();
+	
+	// figure out which condition that was
+	$("input[name*='conditionName']").each(
+			function(k) {
+				var thisId = $(this).parent().attr('id').substring(12);
+				if (thisId == "") { thisId = 0 } 
+				//alert("k: " + k + " thisID = " + thisId);
+				if (k < thisId && thisId < conditionToRemove) {
+					conditionToRemove = k;
+				}
+			});
+
+	var runTables = document.getElementsByName("slam");
+
+	for (var j = 0; j < runTables.length; ++j) {
+		runTables[j].deleteRow(conditionToRemove + 1);
+	}
+	//alert(conditionToRemove);
+	
+}
+
+function addRun() {
+	var runTables = document.getElementsByName("slam");
+
+	// This is the newly added run
+	var runTable = runTables[runTables.length - 1];
+
+	var numConditions = $("input[name*='conditionName']").each(
+		function(k) {
+			// The first row will already exist, so don't create it
+			if (k >= runTable.rows.length - 1) {
+				runTable.insertRow(k + 1);
+			}
+			var row = runTable.rows[k + 1];
+			row.innerHTML = "<td>" + $(this).val() + "</td><td><input type='text'></td><td><input type='text'></td>";
+		});
+}
+
+function refreshRuns(name) {
+	// Find out which cas changed
+	var rowNum = name.substring(13);
+	if (rowNum == "") { rowNum = 0 }
+	
+	// Update that condition in each run
+	var runTables = document.getElementsByName("slam");
+	for (var j = 0; j < runTables.length; ++j) {
+		//alert(runtables[j].rows[rowNum+1]);
+		//alert(runtables[j].rows[rowNum+1].cells[0]);
+		runTables[j].rows[parseInt(rowNum)+1].cells[0].innerHTML = $("input[name="+name+"]").val();
+	}
+}
+
+function listFiles() {
+	var inputBox = document.getElementById("dataDirectory");
+	// send request
+    $.post("ListServerFiles", {folder: inputBox.value},
+		function(response) {
+			var files = response.split("\n")[1].split(",");
+			var listBox = document.getElementById("filesList");
+
+			for(var i in files)
+			{
+				var fileString = files[i];
+				var opt = document.createElement("OPTION");
+		    	opt.text = fileString;
+		    	opt.value = fileString;
+		    	listBox.add(opt, null);
+			}
+    });
+}
+
+function makeFolderBrowser() {
+	$('#folderBrowser').dialog("open");
+	refreshFolderBrowser("/home/jacques");
+}
+
+function makeFilesBrowser() {
+	$('#filesBrowser').dialog("open");
+	var inputBox = document.getElementsByName("dataDirectory");
+	refreshFilesBrowser(inputBox[0].value);
+}
+
+function clickFolderBrowserOpen() {
+	var listBox = document.getElementById("folderBrowserFolderList");
+	var option = listBox.options[listBox.selectedIndex];
+	
+	if (option.text == "..") {
+		refreshFolderBrowser(listBox.currentPath.substring(0, listBox.currentPath.lastIndexOf("/")));
+	} else {
+		refreshFolderBrowser(listBox.currentPath + "/" + option.text);
+	}
+}
+
+function clickFolderBrowserSelect() {
+	$('#folderBrowser').dialog("close");
+	var listBox = document.getElementById("folderBrowserFolderList");
+	var inputBox = document.getElementsByName("dataDirectory");
+	inputBox[0].value = listBox.currentPath;
+}
+
+function refreshFolderBrowser(path) {
+	$.post("ListServerFiles", {folder: path},
+			function(response) {
+				var files = response.split("\n")[0].split(",");
+				var listBox = document.getElementById("folderBrowserFolderList");
+				listBox.currentPath = path;
+				document.getElementById("folderBrowserCurrentFolder").innerHTML = path;
+
+				while(listBox.length > 0) {
+					//alert(index);
+					listBox.remove(0);
+				}
+
+				var opt = document.createElement("OPTION");
+		    	opt.text = "..";
+		    	opt.value = "..";
+		    	listBox.add(opt, null);
+		    	
+				for(var i in files)
+				{
+					var fileString = files[i];
+					var opt = document.createElement("OPTION");
+			    	opt.text = fileString;
+			    	opt.value = fileString;
+			    	listBox.add(opt, null);
+				}
+	    });
+}
+
+function refreshFilesBrowser(path) {
+	$.post("ListServerFiles", {folder: path},
+			function(response) {
+				var files = response.split("\n")[1].split(",");
+				var listBox = document.getElementById("filesBrowserFilesList");
+
+				while(listBox.length > 0) {
+					//alert(index);
+					listBox.remove(0);
+				}
+		    	
+				for(var i in files)
+				{
+					var fileString = files[i];
+					var opt = document.createElement("OPTION");
+			    	opt.text = fileString;
+			    	opt.value = fileString;
+			    	listBox.add(opt, null);
+				}
+	    });
+}
+
+function clickFilesBrowserAdd() {
+	$('#filesBrowser').dialog("close");
+	
+	var dialogListBox = document.getElementById("filesBrowserFilesList");
+	var listBox = document.getElementsByName("filesList")[0].options;
+
+	for (var i = 0; i < dialogListBox.length; i++) {
+		if (dialogListBox.options[i].selected) {
+			var opt = document.createElement("OPTION");
+	    	opt.text = dialogListBox.options[i].text;
+	    	opt.value = dialogListBox.options[i].value;
+	    	listBox.add(opt, null);
+		}
+	}
+	
+}
+
+function createSessionProfile() {
+	// Collect the information from the forms
+	var isNpairs = document.forms.analysisTypeForm.analysisType[1].checked;
+	var isBlock =  document.forms.analysisTypeForm["block-event"][0].checked;
+	var sessionDescription = document.getElementById("sessionDescription").value;
+	var datamatPrefix = document.getElementById("datamatPrefix").value;
+	var acrossRuns = document.forms.analysisTypeForm.acrossRuns[0].checked;
+	var conditionNum = 0;
+
+	var conditionInfo = "";
+
+	while (true) {
+		var numString = "";
+		if (conditionNum > 0) {
+			numString += conditionNum;
+		}
+		var conditionName = document.getElementsByName("conditionName" + numString);
+		var onset = document.getElementsByName("onset" + numString);
+		var numRefScans = document.getElementsByName("numRefScans" + numString);
+
+		if (conditionName.length == 0) {
+			break;
+		}
+
+		if (conditionNum > 0) {
+			conditionInfo += "\n";
+		}
+
+		conditionInfo += conditionName[0].value + " " + onset[0].value + " " + numRefScans[0].value; 
+
+		++conditionNum;
+	} 
+
+	var runPaths = "";
+	var runFiles = "";
+	var runOnsets = "";
+	var runLengths = "";
+
+	var runNum = 0;
+
+	while (true) {
+		var numString = "";
+		if (runNum > 0) {
+			numString += runNum;
+		}
+		
+		var dataDirectory = document.getElementsByName("dataDirectory");
+
+		if (dataDirectory.length <= runNum) {
+			break;
+		}
+
+		if (runNum > 0) {
+			runPaths += "\n";
+			runFiles += "\n";
+			runOnsets += "\n";
+			runLengths += "\n";
+		}
+
+		runPaths += dataDirectory[runNum].value;
+
+		var filesList = document.getElementsByName("filesList")[runNum].options;
+		
+		for (var i = 0; i < filesList.length; ++i) {
+			if (i != 0) {
+				runFiles += " ";
+			}
+			
+			runFiles += filesList[i].value;
+		}
+
+		var runForm = document.getElementsByName("blam")[runNum];
+		var runTable = document.getElementsByName("slam" + numString)[runNum];
+
+		var isOnset = true;
+		for (var i = 0; i < runForm.elements.length; ++i) {
+			if (isOnset) {
+				if (i > 0) {
+					runOnsets += ":";
+				}
+				runOnsets += runForm.elements[i].value;
+			} else {
+				if (i > 1) {
+					runLengths += ":";
+				}
+				runLengths += runForm.elements[i].value;
+			}
+
+			isOnset = !isOnset;
+		} 
+
+		++runNum;
+	}
+
+	var sessionProfileFilename = document.getElementById("sessionProfileFilename").value;
+	
+
+	// Submit session file to be created
+	$.post("CreateSessionProfile",
+			{NPAIRS: isNpairs,
+			 BLOCK: isBlock,
+			 SESSION_FILE: sessionProfileFilename,
+			 DESCRIPTION: sessionDescription,
+//			 IGNORE_RUNS: "",
+//			 BRAIN_MASK: "",
+//			 NUM_SKIPPED_SCANS: "",
+			 MERGE_ACROSS_RUNS: acrossRuns,
+			 CONDITION_INFO: conditionInfo,
+			 RUN_PATHS: runPaths,
+			 RUN_FILES: runFiles,
+			 RUN_ONSETS: runOnsets,
+			 RUN_LENGTHS: runLengths,
+			 DATAMAT_PREFIX: datamatPrefix,
+			 },
+			 function(response) {
+				 document.getElementById("status").innerHTML = response;
+			 });	
+	
+	/*
+	alert("isNpairs: " + isNpairs + "\n" + 
+		  "isBlock: " + isBlock + "\n" + 
+		  "sessionDescription: " + sessionDescription + "\n" +
+		  "datamatPrefix: " + datamatPrefix + "\n" +
+		  "acrossRuns: " + acrossRuns + "\n" +
+		  "conditionInfo: " + conditionInfo + "\n" +
+		  "runPaths: " + runPaths + "\n" + 
+		  "runfiles: " + runFiles + "\n" +
+		  "runOnsets: " + runOnsets + "\n" +
+		  "runLengths: " + runLengths);
+	  */
+}
+
+</script>
+<style type="text/css">
+.red {
+	background: red;
+}
+</style>
+</head>
+<body>
+<div id='main'>
+<form name='analysisTypeForm'>
+<p>
+	What type of analysis would you like to do?
+</p>
+<p>
+	<input type="radio" name="analysisType" checked="checked" />PLS
+	<input type="radio" name="analysisType" />NPAIRS
+</p>
+<p>
+	Specify further.
+</p>
+<p>
+<input type="radio" name="block-event" checked="checked" />Block design
+<input type="radio" name="block-event" />Event related FMRI
+</p>
+<table style='border: solid black'>
+<tr>
+<td>Session description:</td>
+<td><input type="text" id="sessionDescription" /></td></tr>
+<tr>
+<td>Datamat prefix:</td>
+<td><input type="text" id="datamatPrefix" /></td>
+</tr>
+</table>
+
+<table style='border: solid black'>
+<tr><td>Merge conditions:</td></tr>
+<tr><td>
+<input type="radio" name="acrossRuns" checked="checked" />across runs
+<input type="radio" name="acrossRuns" />within each run
+</td></tr>
+</table>
+</form>
+
+Edit Conditions:
+<form style='border: solid black'>
+Condition Name | Reference Scan Onset | Number of Reference Scans
+<p id=conditionRow name=conditionRow>
+<input type="text" name="conditionName" onchange="refreshRuns(name)" />
+<input type="text" name="onset" />
+<input type="text" name="numRefScans" />
+</p>
+</form>
+
+Edit runs:
+
+<ol><li id="run">
+<table style='border: solid gray'>
+<tr><td>Data directory:</td>
+<td><input type="text" name="dataDirectory" /></td>
+<td><input type="button" name="dirBrowse" value="Browse" onclick="makeFolderBrowser()" /></td>
+</tr>
+<tr><td>Data files:</td>
+<td rowspan="2"><select style="min-width: 200px" name="filesList" size="8" multiple="multiple" /></td>
+<td><input type="button" value="Add Files" onclick="makeFilesBrowser()" /></td>
+</tr>
+<tr><td></td>
+<td><input type="button" value="Remove Files" /></td>
+</tr>
+<tr><td colspan=3>
+<form name="blam" style='border: solid black'>
+<table name="slam">
+<tr><th>Condition</th><th>Onsets</th><th>Lengths</th></tr>
+<tr><td></td><td><input type="text" /></td><td><input type="text" /></td></tr>
+</table>
+</form>
+</td></tr>
+</table>
+</li>
+</ol>
+
+
+<table style='border: solid black'>
+<tr><td>Brain Region</td></tr>
+<tr>
+<td><input type="radio" name="brainRegion" value="defineAutomatically" checked="checked" />Define brain region automatically</td>
+</tr>
+<tr>
+<td><input type="text" name="threshold" value="0.15" /></td>
+</tr>
+<tr>
+<td><input type="radio" name="brainRegion" value="defineFromFile" />Use predefined brain region</td>
+</tr>
+<tr>
+<td><input type="text" name="maskFile" /><input type="button" name="browseMask" value="Browse mask file" /></td>
+</tr>
+</table>
+Session profile filename:<input type="text" id="sessionProfileFilename" /><br/>
+<input type="button" value="Create Session Profile" onclick="createSessionProfile()" />
+</div>
+<div>
+<h3>Status:</h3>
+<p id="status">
+</p>
+</div>
+<!-- Divs for Dialogs -->
+<div id="folderBrowser" title="Select a folder">
+<p id="folderBrowserCurrentFolder" />
+<form>
+<p>
+<select style="min-width: 200px" id='folderBrowserFolderList' size=16 /><br/>
+<input type="button" id="folderBrowserOpen" value="Open Folder" onclick="clickFolderBrowserOpen()" />
+<input type="button" id="folderBrowserSelect" value="Use Current Folder" onclick="clickFolderBrowserSelect()" />
+</p>
+</form>
+</div>
+<div id="filesBrowser" title="Select image files">
+<select style="min-width: 200px" id='filesBrowserFilesList' size=16 multiple="multiple">
+</select><br/>
+<input type="button" id="filesBrowserOpen" value="Add Files" onclick="clickFilesBrowserAdd()" />
+</div>
+</body>
+</html>

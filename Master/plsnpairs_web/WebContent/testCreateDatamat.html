@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery.js" ></script>
+<script type="text/javascript">
+function createDatamat() {
+	var sessionFile = "testFile_BfMRIsession.mat";
+	var coordThresh = 0.15;
+	//var ignoreSlices = "";
+	var normalizeVolume = false;
+	var windowSize = 1;
+	var normalizeSignal = false;
+	var singleSubject = false;
+
+	// Submit session file to be created
+	$.post("CreateDatamat",
+			{SESSION_FILE: sessionFile,
+			 COORDINATE_THRESHOLD: coordThresh,
+			 //IGNORE_SLICES: ignoreSlices,
+			 NORMALIZE_MEAN_VOLUME: normalizeVolume,
+			 WINDOW_SIZE: windowSize,
+			 NORMALIZE_SIGNAL_MEAN: normalizeSignal,
+			 SINGLE_SUBJECT: singleSubject
+			 },
+			 function(response) {
+				 document.getElementById("status").innerHTML = response;
+			 });	
+}
+</script>
+<title>This here tests the datamat creation.</title>
+</head>
+<body>
+<div id="main">
+<input type="button" value="Test this out!" onclick="createDatamat()" />
+</div>
+<div id="status">
+</div>
+</body>
+</html>
